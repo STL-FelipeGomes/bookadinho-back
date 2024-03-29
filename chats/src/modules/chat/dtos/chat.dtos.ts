@@ -13,8 +13,12 @@ export const ChatCreate = z.object({
   status: z.string().default('pending'),
 });
 
-export const chatStatusUpdate = z.object({
-  status: z.string(),
-});
+enum StatusChatEnum {
+  open = 'open',
+  closed = 'closed',
+  pending = 'pending',
+}
+
+export const ChatStatusUpdate = z.nativeEnum(StatusChatEnum);
 
 export type ChatType = z.infer<typeof ChatCreate>;

@@ -78,7 +78,7 @@ export class UserController {
         photo,
       });
       return response.status(201).send({
-        body: { status_code: 201, status: 'succes', users: userCreated },
+        body: { status_code: 201, status: 'success', users: userCreated },
       });
     } catch (error: unknown) {
       if (error instanceof ZodError) {
@@ -232,7 +232,7 @@ export class UserController {
       return response.status(200).json({
         body: {
           status_code: 200,
-          status: 'succes',
+          status: 'success',
           users: updateUse,
         },
       });
@@ -296,7 +296,7 @@ export class UserController {
       await this.userUsecase.deleteUser(userId);
       return response
         .status(200)
-        .json({ body: { status_code: 200, status: 'succes', message: 'User successfully deleted!' } });
+        .json({ body: { status_code: 200, status: 'success', message: 'User successfully deleted!' } });
     } catch (error: unknown) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -337,8 +337,8 @@ export class UserController {
       return response.status(200).json({
         body: {
           status_code: 200,
-          status: 'succes',
-          message: 'The user logout succes!',
+          status: 'success',
+          message: 'The user logout success!',
         },
       });
     } catch (error) {

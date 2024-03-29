@@ -1,5 +1,5 @@
 import { prismaClient } from '../../infra/database/prisma/prisma.js';
-import { ChatCreate } from './dtos/chat.dtos.js';
+import { ChatCreate, ChatStatusUpdate } from './dtos/chat.dtos.js';
 
 export class ChatUsecase {
   constructor() {}
@@ -29,12 +29,58 @@ export class ChatUsecase {
       throw error;
     }
   }
-
   public async createChats(data: { sender_id: string; receiver_id: string }) {
     try {
       const chatValidated = ChatCreate.safeParse(data);
       if (!chatValidated.success) throw chatValidated.error;
       return await prismaClient.chats.create({ data });
+    } catch (error) {
+      this.handleError(error);
+      throw error;
+    }
+  }
+  public async updateChat(chatId: string, status: 'pending' | 'closed' | 'open') {
+    const chatValidatedStatus = ChatStatusUpdate.safeParse(status);
+    if (!chatValidatedStatus.success) throw chatValidatedStatus.error;
+    try {
+      return await prismaClient.chats.update({
+        where: {
+          id: chatId,
+        },
+        data: {
+          status,
+        },
+      });
+    } catch (error) {
+      this.handleError(error);
+      throw error;
+    }
+  }
+
+  public async getDBChat(
+    where: {
+      id?: string;
+      status?: string;
+      sender_id?: string;
+      receiver_id?: string;
+    },
+    select: {
+      id?: boolean;
+      status?: boolean;
+      sender_id?: boolean;
+      receiver_id?: boolean;
+    }
+  ) {
+    try {
+      return await prismaClient.chats.findUnique({
+        where: {
+          id: where.id,
+          status: where.status,
+          sender_id: where.sender_id,
+          receiver_id: where.receiver_id,
+        },
+        select,
+      });
     } catch (error) {
       this.handleError(error);
       throw error;

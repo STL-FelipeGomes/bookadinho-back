@@ -103,7 +103,7 @@ export class BookController {
         rate,
         owner_id,
       });
-      return response.status(201).json({ body: { status_code: 201, status: 'succes', books: bookCreated } });
+      return response.status(201).json({ body: { status_code: 201, status: 'success', books: bookCreated } });
     } catch (error: unknown) {
       if (error instanceof ZodError) {
         const { errors } = error;
@@ -174,7 +174,7 @@ export class BookController {
       return response.status(200).json({
         body: {
           status_code: 200,
-          status: 'succes',
+          status: 'success',
           books: updatebook,
         },
       });
@@ -229,7 +229,7 @@ export class BookController {
       await this.bookUseCase.deleteBook(bookId);
       return response
         .status(200)
-        .json({ body: { status_code: 200, status: 'succes', message: 'Book successfully deleted!' } });
+        .json({ body: { status_code: 200, status: 'success', message: 'Book successfully deleted!' } });
     } catch (error) {
       return response
         .status(500)
