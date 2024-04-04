@@ -92,7 +92,7 @@ export class PostController {
     }
     try {
       const createdPost = await this.postUsercase.createPost({ user_id, text });
-      return response.status(201).json({ body: { status_code: 201, status: 'succes', posts: createdPost } });
+      return response.status(201).json({ body: { status_code: 201, status: 'success', posts: createdPost } });
     } catch (error: unknown) {
       if (error instanceof Error && error.message === 'ERR:DATABASE:0001') {
         return response.status(400).send({
@@ -147,7 +147,7 @@ export class PostController {
       return response.status(200).json({
         body: {
           status_code: 200,
-          status: 'succes',
+          status: 'success',
           posts: postEdited,
         },
       });
@@ -196,7 +196,7 @@ export class PostController {
       await this.postUsercase.deletePost(postId);
       return response
         .status(200)
-        .json({ body: { status_code: 200, status: 'succes', message: 'Post successfully deleted!' } });
+        .json({ body: { status_code: 200, status: 'success', message: 'Post successfully deleted!' } });
     } catch (error) {
       response.status(500).send({ body: { status_code: 500, status: 'fail', message: 'Internal Server Error!' } });
     }

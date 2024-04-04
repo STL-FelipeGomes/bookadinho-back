@@ -89,7 +89,7 @@ export class FavoriteBooksController {
         book_id,
         owner_id,
       });
-      return response.status(201).json({ body: { status_code: 201, status: 'succes', favorite_books: bookCreated } });
+      return response.status(201).json({ body: { status_code: 201, status: 'success', favorite_books: bookCreated } });
     } catch (error: unknown) {
       if (error instanceof ZodError) {
         const { errors } = error;
@@ -151,7 +151,7 @@ export class FavoriteBooksController {
       await this.favoriteBooksUsecase.deleteFavoriteBook({ book_id, owner_id });
       return response
         .status(200)
-        .json({ body: { status_code: 200, status: 'succes', message: 'Favorite book successfully deleted!' } });
+        .json({ body: { status_code: 200, status: 'success', message: 'Favorite book successfully deleted!' } });
     } catch (error) {
       return response
         .status(500)

@@ -15,7 +15,7 @@ export class ExceptionRoutesController {
     return response.status(200).json({
       body: {
         status_code: 200,
-        status: 'succes',
+        status: 'success',
         info: {
           welcome: 'Welcome the Bookadinho!',
           message:
