@@ -8,6 +8,7 @@ export const ChatValidation = z.object({
 });
 
 export const ChatCreate = z.object({
+  envite_message: z.string().max(2000, { message: 'Must be a maximum of 2000 characters' }),
   sender_id: z.string().uuid().readonly(),
   receiver_id: z.string().uuid().readonly(),
   status: z.string().default('pending'),

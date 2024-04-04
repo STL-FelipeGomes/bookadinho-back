@@ -8,18 +8,38 @@ datasource db {
 }
 
 model Users {
-  id         String   @id @unique
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  sender     Chats[]  @relation("sender")
-  receiver   Chats[]  @relation("receiver")
+  id                String     @id @unique
+  created_at        DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
+  chat_sender       Chats[]    @relation("sender")
+  chat_receiver     Chats[]    @relation("receiver")
+  message_sender    Messages[] @relation("sender")
+  messages_receiver Messages[] @relation("receiver")
 
   @@map("users")
 }
 
 model Chats {
+  id             String     @id @unique @default(uuid())
+  status         String     @default("pending")
+  sender_id      String
+  sender         Users      @relation("sender", fields: [sender_id], references: [id])
+  receiver_id    String
+  receiver       Users      @relation("receiver", fields: [receiver_id], references: [id])
+  envite_message String     @db.VarChar(2000)
+  message_id     Messages[]
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+
+  @@map("chats")
+}
+
+model Messages {
   id          String   @id @unique @default(uuid())
   status      String   @default("pending")
+  message     String   @db.VarChar(2000)
+  chat_id     String
+  chat        Chats    @relation(fields: [chat_id], references: [id])
   sender_id   String
   sender      Users    @relation("sender", fields: [sender_id], references: [id])
   receiver_id String
@@ -27,5 +47,5 @@ model Chats {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  @@map("chats")
+  @@map("messages")
 }

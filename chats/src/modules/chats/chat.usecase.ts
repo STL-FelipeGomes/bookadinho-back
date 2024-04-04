@@ -4,6 +4,7 @@ import { ChatCreate, ChatStatusUpdate } from './dtos/chat.dtos.js';
 export class ChatUsecase {
   constructor() {}
   public async getAllChats(
+    user_id: string,
     isGetAllChats: boolean,
     quantityBooks = 10,
     page = 0,
@@ -16,7 +17,17 @@ export class ChatUsecase {
     try {
       return await prismaClient.chats.findMany({
         where: {
-          status: search,
+          AND: {
+            status: search,
+            OR: [
+              {
+                sender_id: user_id,
+              },
+              {
+                receiver_id: user_id,
+              },
+            ],
+          },
         },
         orderBy: {
           created_at: 'desc',
@@ -29,7 +40,7 @@ export class ChatUsecase {
       throw error;
     }
   }
-  public async createChats(data: { sender_id: string; receiver_id: string }) {
+  public async createChats(data: { sender_id: string; receiver_id: string; envite_message: string }) {
     try {
       const chatValidated = ChatCreate.safeParse(data);
       if (!chatValidated.success) throw chatValidated.error;
@@ -56,7 +67,18 @@ export class ChatUsecase {
       throw error;
     }
   }
-
+  public async getChatById(chatId: string) {
+    try {
+      return await prismaClient.chats.findFirst({
+        where: {
+          id: chatId,
+        },
+      });
+    } catch (error) {
+      this.handleError(error);
+      throw error;
+    }
+  }
   public async getDBChat(
     where: {
       id?: string;

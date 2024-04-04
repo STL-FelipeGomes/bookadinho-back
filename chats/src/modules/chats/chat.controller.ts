@@ -10,8 +10,9 @@ export class ChatController {
 
   public async getAllChats(request: Request, response: Response) {
     const { allchats: allChats = false } = request.params;
-    const { quantity: quantityBooks = 10, page = 0, filter: filterStatus } = request.query;
-    if (isNaN(Number(quantityBooks)) || isNaN(Number(page)) || Number(quantityBooks) < 1 || Number(page) < 0) {
+    const { quantity: quantityChats = 10, page = 0, filter: filterStatus } = request.query;
+    const { user_id } = response.locals;
+    if (isNaN(Number(quantityChats)) || isNaN(Number(page)) || Number(quantityChats) < 1 || Number(page) < 0) {
       return response.status(400).json({
         body: {
           status_code: 400,
@@ -30,13 +31,14 @@ export class ChatController {
       });
     }
     try {
-      const booksConsulted = await this.chatUsecase.getAllChats(
+      const chatsConsulted = await this.chatUsecase.getAllChats(
+        user_id,
         !!allChats,
-        Number(quantityBooks),
+        Number(quantityChats),
         Number(page),
         filterStatus as 'open' | 'closed' | 'pending' | undefined
       );
-      return response.status(200).send({ body: { status_code: 200, status: 'success', chats: booksConsulted } });
+      return response.status(200).send({ body: { status_code: 200, status: 'success', chats: chatsConsulted } });
     } catch (error) {
       return response
         .status(500)
@@ -44,7 +46,7 @@ export class ChatController {
     }
   }
   public async createChat(request: Request, response: Response) {
-    const { sender_id = '', receiver_id = '' } = request.body;
+    const { sender_id = '', receiver_id = '', envite_message = '' } = request.body;
     const { user_id } = response.locals;
 
     if (user_id !== sender_id) {
@@ -78,7 +80,7 @@ export class ChatController {
     }
 
     try {
-      const chatCreated = await this.chatUsecase.createChats({ sender_id, receiver_id });
+      const chatCreated = await this.chatUsecase.createChats({ sender_id, receiver_id, envite_message });
       return response.status(201).send({ body: { status_code: 201, status: 'success', chats: chatCreated } });
     } catch (error: unknown) {
       if (error instanceof ZodError) {
