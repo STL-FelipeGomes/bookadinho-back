@@ -1,5 +1,6 @@
 import { prismaClient } from '../../infra/database/prisma/prisma.js';
 import { messageCreate } from './dtos/message.dtos.js';
+import { SocketUsecase } from '../socket/socket.usecase.js';
 
 export class MessageUsecase {
   constructor() {}
@@ -25,7 +26,9 @@ export class MessageUsecase {
     try {
       const messageValidated = messageCreate.safeParse(data);
       if (!messageValidated.success) throw messageValidated.error;
-      return await prismaClient.messages.create({ data });
+      const message = await prismaClient.messages.create({ data });
+      SocketUsecase.toEmit({ chat_id: data.chat_id, message });
+      return message;
     } catch (error) {
       this.handleError(error);
       throw error;
