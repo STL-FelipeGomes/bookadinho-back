@@ -1,7 +1,7 @@
 import cluster from 'node:cluster';
 import os from 'node:os';
 import 'dotenv/config';
-// import '../../infra/kafka/intex.js';
+import '../../infra/kafka/intex.js';
 import { server } from './server.socket.js';
 
 const cpus = os.cpus();
