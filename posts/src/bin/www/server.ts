@@ -2,7 +2,6 @@ import cluster from 'node:cluster';
 import os from 'node:os';
 import 'dotenv/config';
 import app from '../../app.js';
-import '../../infra/database/redis/index.js';
 import '../../infra/kafka/intex.js';
 
 const cpus = os.cpus();

@@ -69,7 +69,7 @@ export class ChatUsecase {
   }
   public async getChatById(chatId: string) {
     try {
-      return await prismaClient.chats.findFirst({
+      return await prismaClient.chats.findUnique({
         where: {
           id: chatId,
         },
