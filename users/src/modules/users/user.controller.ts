@@ -34,10 +34,10 @@ export class UserController {
         .send({ body: { status_code: 500, status: 'fail', message: 'Internal Server Error!' } });
     }
   }
-  public async getUserById(request: Request, response: Response) {
-    const { username: userName } = request.params;
+  public async getUserByUsernameOrUserId(request: Request, response: Response) {
+    const { search } = request.params;
     try {
-      const userConsultedById = await this.userUsecase.getUserByUsername(userName);
+      const userConsultedById = await this.userUsecase.getUserByUsernameOrUserId(search);
       return userConsultedById
         ? response.status(200).send({ body: { status_code: 200, status: 'success', users: userConsultedById } })
         : response

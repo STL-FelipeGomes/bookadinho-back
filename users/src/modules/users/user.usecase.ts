@@ -50,11 +50,18 @@ export class UserUsecase {
       throw error;
     }
   }
-  public async getUserByUsername(user_name: string) {
+  public async getUserByUsernameOrUserId(search: string) {
     try {
       return await prismaClient.users.findFirst({
         where: {
-          user_name,
+          OR: [
+            {
+              user_name: search,
+            },
+            {
+              id: search,
+            },
+          ],
         },
         select: {
           id: true,

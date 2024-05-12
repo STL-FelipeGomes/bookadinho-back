@@ -10,7 +10,7 @@ const auth = new Auth();
 
 routes
   .get('/users/:allusers(true)?', userController.getAllUsers.bind(userController))
-  .get('/users/:username', userController.getUserById.bind(userController))
+  .get('/users/:search', userController.getUserByUsernameOrUserId.bind(userController))
   .post('/users', userController.createUser.bind(userController))
   .post('/users/auth', userController.loginUser.bind(userController))
   .put('/users/:id', auth.verifyAuthentication.bind(auth), userController.updateUser.bind(userController))
