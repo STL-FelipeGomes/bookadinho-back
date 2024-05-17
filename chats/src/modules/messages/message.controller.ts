@@ -33,8 +33,6 @@ export class MessageController {
         .status(500)
         .send({ body: { status_code: 500, status: 'fail', message: 'Internal Server Error!' } });
     }
-
-    return response.send('basas');
   }
   public async createMessage(request: Request, response: Response) {
     const { chat_id, message } = request.body;
@@ -42,16 +40,16 @@ export class MessageController {
 
     try {
       const chat = await this.chatUsecase.getChatById(chat_id);
-      if (chat?.status !== 'open') {
-        return response.status(401).send({
-          body: {
-            status_code: 401,
-            status: 'fail',
-            message: 'Cannot send message to status that is not open!',
-          },
-        });
-      }
-      if (chat.sender_id !== user_id && chat.receiver_id !== user_id) {
+      // if (chat?.status !== 'open') {
+      //   return response.status(401).send({
+      //     body: {
+      //       status_code: 401,
+      //       status: 'fail',
+      //       message: 'Cannot send message to status that is not open!',
+      //     },
+      //   });
+      // }
+      if (!chat || (chat?.sender_id !== user_id && chat?.receiver_id !== user_id)) {
         return response.status(401).send({
           body: {
             status_code: 401,
